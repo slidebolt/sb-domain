@@ -99,56 +99,60 @@ func init() {
 }
 
 func init() {
-Register("alarm", Alarm{})
-Register("camera", Camera{})
-Register("valve", Valve{})
-Register("siren", Siren{})
-Register("humidifier", Humidifier{})
-Register("media_player", MediaPlayer{})
-Register("remote", Remote{})
-Register("event", Event{})
+	Register("alarm", Alarm{})
+	Register("camera", Camera{})
+	Register("valve", Valve{})
+	Register("siren", Siren{})
+	Register("humidifier", Humidifier{})
+	Register("media_player", MediaPlayer{})
+	Register("remote", Remote{})
+	Register("event", Event{})
+	Register("phone", Phone{})
 
-// Alarm
-RegisterCommand("alarm_arm_home", AlarmArmHome{})
-RegisterCommand("alarm_arm_away", AlarmArmAway{})
-RegisterCommand("alarm_arm_night", AlarmArmNight{})
-RegisterCommand("alarm_disarm", AlarmDisarm{})
+	// Alarm
+	RegisterCommand("alarm_arm_home", AlarmArmHome{})
+	RegisterCommand("alarm_arm_away", AlarmArmAway{})
+	RegisterCommand("alarm_arm_night", AlarmArmNight{})
+	RegisterCommand("alarm_disarm", AlarmDisarm{})
 
-// Camera
-RegisterCommand("camera_record_start", CameraRecordStart{})
-RegisterCommand("camera_record_stop", CameraRecordStop{})
-RegisterCommand("camera_enable_motion", CameraEnableMotion{})
-RegisterCommand("camera_disable_motion", CameraDisableMotion{})
+	// Camera
+	RegisterCommand("camera_record_start", CameraRecordStart{})
+	RegisterCommand("camera_record_stop", CameraRecordStop{})
+	RegisterCommand("camera_enable_motion", CameraEnableMotion{})
+	RegisterCommand("camera_disable_motion", CameraDisableMotion{})
 
-// Valve
-RegisterCommand("valve_open", ValveOpen{})
-RegisterCommand("valve_close", ValveClose{})
-RegisterCommand("valve_set_position", ValveSetPosition{})
+	// Valve
+	RegisterCommand("valve_open", ValveOpen{})
+	RegisterCommand("valve_close", ValveClose{})
+	RegisterCommand("valve_set_position", ValveSetPosition{})
 
-// Siren
-RegisterCommand("siren_turn_on", SirenTurnOn{})
-RegisterCommand("siren_turn_off", SirenTurnOff{})
-RegisterCommand("siren_set_tone", SirenSetTone{})
+	// Siren
+	RegisterCommand("siren_turn_on", SirenTurnOn{})
+	RegisterCommand("siren_turn_off", SirenTurnOff{})
+	RegisterCommand("siren_set_tone", SirenSetTone{})
 
-// Humidifier
-RegisterCommand("humidifier_turn_on", HumidifierTurnOn{})
-RegisterCommand("humidifier_turn_off", HumidifierTurnOff{})
-RegisterCommand("humidifier_set_humidity", HumidifierSetHumidity{})
-RegisterCommand("humidifier_set_mode", HumidifierSetMode{})
+	// Humidifier
+	RegisterCommand("humidifier_turn_on", HumidifierTurnOn{})
+	RegisterCommand("humidifier_turn_off", HumidifierTurnOff{})
+	RegisterCommand("humidifier_set_humidity", HumidifierSetHumidity{})
+	RegisterCommand("humidifier_set_mode", HumidifierSetMode{})
 
-// MediaPlayer
-RegisterCommand("media_play", MediaPlay{})
-RegisterCommand("media_pause", MediaPause{})
-RegisterCommand("media_stop", MediaStop{})
-RegisterCommand("media_next_track", MediaNextTrack{})
-RegisterCommand("media_previous_track", MediaPreviousTrack{})
-RegisterCommand("media_set_volume", MediaSetVolume{})
-RegisterCommand("media_mute", MediaMute{})
-RegisterCommand("media_select_source", MediaSelectSource{})
+	// MediaPlayer
+	RegisterCommand("media_play", MediaPlay{})
+	RegisterCommand("media_pause", MediaPause{})
+	RegisterCommand("media_stop", MediaStop{})
+	RegisterCommand("media_next_track", MediaNextTrack{})
+	RegisterCommand("media_previous_track", MediaPreviousTrack{})
+	RegisterCommand("media_set_volume", MediaSetVolume{})
+	RegisterCommand("media_mute", MediaMute{})
+	RegisterCommand("media_select_source", MediaSelectSource{})
 
-// Remote
-RegisterCommand("remote_turn_on", RemoteTurnOn{})
-RegisterCommand("remote_turn_off", RemoteTurnOff{})
-RegisterCommand("remote_set_activity", RemoteSetActivity{})
-RegisterCommand("remote_send_command", RemoteSendCommand{})
+	// Remote
+	RegisterCommand("remote_turn_on", RemoteTurnOn{})
+	RegisterCommand("remote_turn_off", RemoteTurnOff{})
+	RegisterCommand("remote_set_activity", RemoteSetActivity{})
+	RegisterCommand("remote_send_command", RemoteSendCommand{})
+	RegisterCommand("phone_register_push_token", PhoneRegisterPushToken{})
+	RegisterCommand("phone_send_notification", PhoneSendNotification{})
+	RegisterCommand("phone_send_data_message", PhoneSendDataMessage{})
 }
