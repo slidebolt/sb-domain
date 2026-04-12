@@ -61,6 +61,12 @@ type DeviceProfile struct {
 }
 
 // Device represents a physical or virtual device discovered by a plugin.
+//
+// Private is a plugin-owned opaque JSON blob (credentials, API tokens, etc.)
+// that is routed to the .private.json sidecar on Save. It is never returned
+// by Get/Search/Query and never included in state.changed events — only the
+// owning plugin can read it back via storage.GetPrivate. The schema is
+// plugin-defined; sb-domain treats it as raw bytes.
 type Device struct {
 	ID       string                     `json:"id"`
 	Plugin   string                     `json:"plugin"`
@@ -68,6 +74,7 @@ type Device struct {
 	Labels   map[string][]string        `json:"labels,omitempty"`
 	Profile  *DeviceProfile             `json:"profile,omitempty"`
 	Meta     map[string]json.RawMessage `json:"meta,omitempty"`
+	Private  json.RawMessage            `json:"private,omitempty"`
 	Entities []Entity                   `json:"entities"`
 }
 
@@ -96,6 +103,7 @@ type Entity struct {
 	Labels   map[string][]string        `json:"labels,omitempty"`
 	Profile  *EntityProfile             `json:"profile,omitempty"`
 	Meta     map[string]json.RawMessage `json:"meta,omitempty"`
+	Private  json.RawMessage            `json:"private,omitempty"`
 	Commands []string                   `json:"commands,omitempty"`
 	State    any                        `json:"state"`
 	Target   json.RawMessage            `json:"target,omitempty"`
@@ -115,6 +123,7 @@ func (e *Entity) UnmarshalJSON(data []byte) error {
 		Labels   map[string]json.RawMessage `json:"labels,omitempty"`
 		Profile  *EntityProfile             `json:"profile,omitempty"`
 		Meta     map[string]json.RawMessage `json:"meta,omitempty"`
+		Private  json.RawMessage            `json:"private,omitempty"`
 		State    json.RawMessage            `json:"state,omitempty"`
 		Target   json.RawMessage            `json:"target,omitempty"`
 	}
@@ -131,6 +140,7 @@ func (e *Entity) UnmarshalJSON(data []byte) error {
 	e.Labels = decodeLabels(aux.Labels)
 	e.Profile = aux.Profile
 	e.Meta = aux.Meta
+	e.Private = aux.Private
 	e.Target = aux.Target
 
 	if len(aux.State) == 0 || string(aux.State) == "null" {
