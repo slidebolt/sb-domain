@@ -89,6 +89,8 @@ func init() {
 	RegisterCommand("lock_unlock", LockUnlock{})
 
 	RegisterCommand("button_press", ButtonPress{})
+	RegisterCommand("binary_sensor_turn_on", BinarySensorTurnOn{})
+	RegisterCommand("binary_sensor_turn_off", BinarySensorTurnOff{})
 
 	RegisterCommand("number_set_value", NumberSetValue{})
 	RegisterCommand("select_option", SelectOption{})
