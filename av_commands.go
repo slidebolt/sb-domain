@@ -66,3 +66,12 @@ func (CameraEnableMotion) ActionName() string { return "camera_enable_motion" }
 type CameraDisableMotion struct{}
 
 func (CameraDisableMotion) ActionName() string { return "camera_disable_motion" }
+
+// MediaStream commands
+type MediaStreamStart struct{}
+
+func (MediaStreamStart) ActionName() string { return "media_stream_start" }
+
+type MediaStreamStop struct{}
+
+func (MediaStreamStop) ActionName() string { return "media_stream_stop" }

@@ -107,6 +107,14 @@ func init() {
 	Register("siren", Siren{})
 	Register("humidifier", Humidifier{})
 	Register("media_player", MediaPlayer{})
+	Register("media_stream", MediaStream{})
+	Register("pbx", PBX{})
+	Register("sip_trunk", SIPTrunk{})
+	Register("sip_endpoint", SIPEndpoint{})
+	Register("sip_call", SIPCall{})
+	Register("sip_participant", SIPParticipant{})
+	Register("agent", Agent{})
+	Register("transcript", Transcript{})
 	Register("remote", Remote{})
 	Register("event", Event{})
 	Register("phone", Phone{})
@@ -148,6 +156,28 @@ func init() {
 	RegisterCommand("media_set_volume", MediaSetVolume{})
 	RegisterCommand("media_mute", MediaMute{})
 	RegisterCommand("media_select_source", MediaSelectSource{})
+
+	// MediaStream
+	RegisterCommand("media_stream_start", MediaStreamStart{})
+	RegisterCommand("media_stream_stop", MediaStreamStop{})
+
+	// SIP
+	RegisterCommand("pbx_reload", PBXReload{})
+	RegisterCommand("sip_call", SIPDial{})
+	RegisterCommand("sip_hangup", SIPHangup{})
+	RegisterCommand("sip_play", SIPPlay{})
+	RegisterCommand("sip_mute", SIPMute{})
+	RegisterCommand("sip_unmute", SIPUnmute{})
+	RegisterCommand("sip_hold", SIPHold{})
+	RegisterCommand("sip_unhold", SIPUnhold{})
+	RegisterCommand("sip_dtmf", SIPDTMF{})
+	RegisterCommand("sip_remove", SIPRemove{})
+	RegisterCommand("sip_transcribe_start", SIPTranscribeStart{})
+	RegisterCommand("sip_transcribe_stop", SIPTranscribeStop{})
+
+	// Agent
+	RegisterCommand("agent_prompt", AgentPrompt{})
+	RegisterCommand("agent_cancel", AgentCancel{})
 
 	// Remote
 	RegisterCommand("remote_turn_on", RemoteTurnOn{})

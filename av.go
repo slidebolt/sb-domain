@@ -23,3 +23,15 @@ MotionDetection bool   `json:"motionDetection"`
 StreamSource    string `json:"streamSource,omitempty"`
 SnapshotURL     string `json:"snapshotURL,omitempty"`
 }
+
+// MediaStream describes a stream served by sb-media. Kind is audio today and
+// will also cover video and image. URL carries an access token, so treat it as
+// a secret and keep it out of logs.
+type MediaStream struct {
+	Status  string `json:"status"` // idle, starting, live, error
+	Kind    string `json:"kind"`
+	URL     string `json:"url,omitempty"`
+	Format  string `json:"format,omitempty"`
+	Viewers int    `json:"viewers"`
+	Error   string `json:"error,omitempty"`
+}
