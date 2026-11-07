@@ -20,6 +20,10 @@ func TestSIP_EntityTypesHydrate(t *testing.T) {
 			s, ok := v.(Speech)
 			return ok && s.Text == "hi" && s.Seq == 2 && s.Status == "speaking"
 		}},
+		"sip_messages": {`{"seq":4,"from":"201","text":"hi","at":"2026-11-07T00:00:00Z"}`, func(v any) bool {
+			s, ok := v.(SIPMessages)
+			return ok && s.Seq == 4 && s.From == "201" && s.Text == "hi" && s.At != ""
+		}},
 		"sip_participant": {`{"status":"joined","muted":true}`, func(v any) bool { s, ok := v.(SIPParticipant); return ok && s.Status == "joined" && s.Muted }},
 	}
 	for typ, tc := range cases {
@@ -40,7 +44,7 @@ func TestSIP_CommandsAreRegisteredWithMatchingNames(t *testing.T) {
 	cmds := []interface{ ActionName() string }{
 		PBXReload{}, SIPDial{}, SIPHangup{}, SIPPlay{}, SIPMute{}, SIPUnmute{},
 		SIPHold{}, SIPUnhold{}, SIPDTMF{}, SIPRemove{},
-		SIPTranscribeStart{}, SIPTranscribeStop{}, SIPSay{}, AgentPrompt{}, AgentCancel{},
+		SIPTranscribeStart{}, SIPTranscribeStop{}, SIPSay{}, SIPMessageSend{}, AgentPrompt{}, AgentCancel{},
 	}
 	for _, c := range cmds {
 		if _, ok := LookupCommand(c.ActionName()); !ok {

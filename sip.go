@@ -104,3 +104,20 @@ func (SIPDTMF) ActionName() string { return "sip_dtmf" }
 type SIPRemove struct{}
 
 func (SIPRemove) ActionName() string { return "sip_remove" }
+
+// SIPMessages is the inbox of a number answered by SlideBolt: the latest text
+// message received. Seq rises with every message.
+type SIPMessages struct {
+	Seq  int    `json:"seq"`
+	From string `json:"from,omitempty"` // the sending extension
+	Text string `json:"text,omitempty"`
+	At   string `json:"at,omitempty"` // RFC 3339
+}
+
+// SIPMessageSend sends a text message from the addressed number to an extension.
+type SIPMessageSend struct {
+	To   string `json:"to"`
+	Text string `json:"text"`
+}
+
+func (SIPMessageSend) ActionName() string { return "sip_message_send" }

@@ -116,6 +116,7 @@ func init() {
 	Register("agent", Agent{})
 	Register("transcript", Transcript{})
 	Register("speech", Speech{})
+	Register("sip_messages", SIPMessages{})
 	Register("remote", Remote{})
 	Register("event", Event{})
 	Register("phone", Phone{})
@@ -176,6 +177,7 @@ func init() {
 	RegisterCommand("sip_transcribe_start", SIPTranscribeStart{})
 	RegisterCommand("sip_transcribe_stop", SIPTranscribeStop{})
 	RegisterCommand("sip_say", SIPSay{})
+	RegisterCommand("sip_message_send", SIPMessageSend{})
 
 	// Agent
 	RegisterCommand("agent_prompt", AgentPrompt{})
