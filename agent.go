@@ -41,3 +41,19 @@ func (SIPTranscribeStart) ActionName() string { return "sip_transcribe_start" }
 type SIPTranscribeStop struct{}
 
 func (SIPTranscribeStop) ActionName() string { return "sip_transcribe_stop" }
+
+// Speech is text being spoken into a call. Seq rises with every utterance spoken.
+type Speech struct {
+	Status string `json:"status"` // idle, speaking, error
+	Seq    int    `json:"seq"`
+	Text   string `json:"text,omitempty"`
+	Error  string `json:"error,omitempty"`
+}
+
+// SIPSay speaks text into a call, through its speech-to-text session. Saying
+// something new interrupts anything still being spoken.
+type SIPSay struct {
+	Text string `json:"text"`
+}
+
+func (SIPSay) ActionName() string { return "sip_say" }

@@ -24,7 +24,7 @@ type SIPEndpoint struct {
 	IP         string `json:"ip,omitempty"`
 	Agent      string `json:"agent,omitempty"`
 	Status     string `json:"status,omitempty"` // online, offline
-	Role       string `json:"role,omitempty"`
+	Role       string `json:"role,omitempty"`   // e.g. intercom, service (a line answered by SlideBolt)
 	Call       string `json:"call,omitempty"`
 }
 
