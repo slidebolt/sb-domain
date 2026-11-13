@@ -59,6 +59,12 @@ func init() {
 	Register("select", Select{})
 	Register("text", Text{})
 	Register("climate", Climate{})
+	Register("timer", Timer{})
+	Register("tv_channel", TVChannel{})
+	Register("tv_tuner", TVTuner{})
+	Register("recording_switch", RecordingSwitch{})
+	Register("recording_file", RecordingFile{})
+	Register("tv_recording_rule", TVRecordingRule{})
 
 	RegisterCommand("light_turn_on", LightTurnOn{})
 	RegisterCommand("light_turn_off", LightTurnOff{})
@@ -98,6 +104,10 @@ func init() {
 
 	RegisterCommand("climate_set_mode", ClimateSetMode{})
 	RegisterCommand("climate_set_temperature", ClimateSetTemperature{})
+	RegisterCommand("timer_enable", TimerEnable{})
+	RegisterCommand("timer_disable", TimerDisable{})
+	RegisterCommand("tv_record_current", TVRecordCurrent{})
+	RegisterCommand("tv_record_series", TVRecordSeries{})
 }
 
 func init() {
