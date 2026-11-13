@@ -55,18 +55,30 @@ type RecordingSwitch struct {
 	LastError    string     `json:"lastError,omitempty"`
 }
 
+type RecordingStatus string
+
+const (
+	RecordingStatusRecording RecordingStatus = "recording"
+	RecordingStatusEncoding  RecordingStatus = "encoding"
+	RecordingStatusCompleted RecordingStatus = "completed"
+	RecordingStatusFailed    RecordingStatus = "failed"
+)
+
 type RecordingFile struct {
-	Status       string     `json:"status"`
-	RelativePath string     `json:"relativePath"`
-	PartialPath  string     `json:"partialPath,omitempty"`
-	Format       string     `json:"format"`
-	Profile      string     `json:"profile"`
-	Channel      TVChannel  `json:"channel"`
-	Program      *TVProgram `json:"program,omitempty"`
-	StartedAt    time.Time  `json:"startedAt"`
-	FinishedAt   *time.Time `json:"finishedAt,omitempty"`
-	BytesWritten int64      `json:"bytesWritten"`
-	Error        string     `json:"error,omitempty"`
+	Status             RecordingStatus `json:"status"`
+	RelativePath       string          `json:"relativePath"`
+	PartialPath        string          `json:"partialPath,omitempty"`
+	Format             string          `json:"format"`
+	Profile            string          `json:"profile"`
+	Channel            TVChannel       `json:"channel"`
+	Program            *TVProgram      `json:"program,omitempty"`
+	StartedAt          time.Time       `json:"startedAt"`
+	FinishedAt         *time.Time      `json:"finishedAt,omitempty"`
+	EncodingStartedAt  *time.Time      `json:"encodingStartedAt,omitempty"`
+	EncodingFinishedAt *time.Time      `json:"encodingFinishedAt,omitempty"`
+	SourceBytes        int64           `json:"sourceBytes,omitempty"`
+	BytesWritten       int64           `json:"bytesWritten"`
+	Error              string          `json:"error,omitempty"`
 }
 
 type TVRecordingRule struct {
