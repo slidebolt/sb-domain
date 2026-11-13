@@ -47,13 +47,13 @@ type RecordingStartInput struct {
 }
 
 type RecordingSwitch struct {
-	Power        bool       `json:"power"`
-	ChannelKey   string     `json:"channel,omitempty"`
-	Program      *TVProgram `json:"program,omitempty"`
-	FileDeviceID string     `json:"fileDeviceID,omitempty"`
-	StartedAt    *time.Time `json:"startedAt,omitempty"`
-	BytesWritten int64      `json:"bytesWritten,omitempty"`
-	LastError    string     `json:"lastError,omitempty"`
+	Power         bool       `json:"power"`
+	ChannelKey    string     `json:"channel,omitempty"`
+	Program       *TVProgram `json:"program,omitempty"`
+	FileEntityKey string     `json:"fileEntityKey,omitempty"`
+	StartedAt     *time.Time `json:"startedAt,omitempty"`
+	BytesWritten  int64      `json:"bytesWritten,omitempty"`
+	LastError     string     `json:"lastError,omitempty"`
 }
 
 type RecordingStatus string

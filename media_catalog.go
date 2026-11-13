@@ -22,6 +22,7 @@ type MediaServer struct {
 
 type MediaLibrary struct {
 	ServerID  string     `json:"serverID"`
+	LibraryID string     `json:"libraryID"`
 	Kind      string     `json:"kind"` // movie, show, music, photo, mixed
 	ItemCount int        `json:"itemCount,omitempty"`
 	CanBrowse bool       `json:"canBrowse"`
