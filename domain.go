@@ -6,7 +6,19 @@ package domain
 import (
 	"encoding/json"
 	"reflect"
+	"time"
 )
+
+// ResourceStatus is the provider-neutral health observation for a device or
+// entity. Plugins translate provider-specific conditions into this envelope.
+// An omitted status means the health is unknown; consumers must not infer
+// health from the resource merely existing in storage.
+type ResourceStatus struct {
+	Health            string    `json:"health"`
+	ObservedAt        time.Time `json:"observedAt,omitzero"`
+	StaleAfterSeconds int       `json:"staleAfterSeconds,omitempty"`
+	Message           string    `json:"message,omitempty"`
+}
 
 // decodeLabels unmarshals a raw label map into canonical array format:
 // "room": ["kitchen"]. Accepts both string and []string values in JSON.
@@ -74,6 +86,7 @@ type Device struct {
 	Labels   map[string][]string        `json:"labels,omitempty"`
 	Profile  *DeviceProfile             `json:"profile,omitempty"`
 	Meta     map[string]json.RawMessage `json:"meta,omitempty"`
+	Status   *ResourceStatus            `json:"status,omitempty"`
 	Private  json.RawMessage            `json:"private,omitempty"`
 	Entities []Entity                   `json:"entities"`
 }
@@ -103,6 +116,7 @@ type Entity struct {
 	Labels   map[string][]string        `json:"labels,omitempty"`
 	Profile  *EntityProfile             `json:"profile,omitempty"`
 	Meta     map[string]json.RawMessage `json:"meta,omitempty"`
+	Status   *ResourceStatus            `json:"status,omitempty"`
 	Private  json.RawMessage            `json:"private,omitempty"`
 	Commands []string                   `json:"commands,omitempty"`
 	State    any                        `json:"state"`
@@ -123,6 +137,7 @@ func (e *Entity) UnmarshalJSON(data []byte) error {
 		Labels   map[string]json.RawMessage `json:"labels,omitempty"`
 		Profile  *EntityProfile             `json:"profile,omitempty"`
 		Meta     map[string]json.RawMessage `json:"meta,omitempty"`
+		Status   *ResourceStatus            `json:"status,omitempty"`
 		Private  json.RawMessage            `json:"private,omitempty"`
 		State    json.RawMessage            `json:"state,omitempty"`
 		Target   json.RawMessage            `json:"target,omitempty"`
@@ -140,6 +155,7 @@ func (e *Entity) UnmarshalJSON(data []byte) error {
 	e.Labels = decodeLabels(aux.Labels)
 	e.Profile = aux.Profile
 	e.Meta = aux.Meta
+	e.Status = aux.Status
 	e.Private = aux.Private
 	e.Target = aux.Target
 
