@@ -113,6 +113,7 @@ func init() {
 	RegisterCommand("timer_disable", TimerDisable{})
 	RegisterCommand("tv_record_current", TVRecordCurrent{})
 	RegisterCommand("tv_record_series", TVRecordSeries{})
+	RegisterCommand("tv_record_airing", TVRecordAiring{})
 	RegisterCommand("tv_record_cancel", TVRecordCancel{})
 	RegisterCommand("media_provider_connect", MediaProviderConnect{})
 	RegisterCommand("media_provider_disconnect", MediaProviderDisconnect{})

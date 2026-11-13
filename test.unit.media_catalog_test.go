@@ -19,7 +19,7 @@ func TestMediaCatalogEntitiesDecode(t *testing.T) {
 }
 
 func TestMediaCatalogCommandsRegistered(t *testing.T) {
-	for _, action := range []string{"media_provider_connect", "media_provider_disconnect", "media_play_item", "media_seek", "tv_record_cancel"} {
+	for _, action := range []string{"media_provider_connect", "media_provider_disconnect", "media_play_item", "media_seek", "tv_record_airing", "tv_record_cancel"} {
 		if _, ok := LookupCommand(action); !ok {
 			t.Fatalf("command %s not registered", action)
 		}
