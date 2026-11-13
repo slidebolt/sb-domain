@@ -3,16 +3,17 @@ package domain
 import "time"
 
 type TVProgram struct {
-	AiringID     string    `json:"airingID"`
-	SeriesID     string    `json:"seriesID,omitempty"`
-	Title        string    `json:"title"`
-	EpisodeTitle string    `json:"episodeTitle,omitempty"`
-	Season       int       `json:"season,omitempty"`
-	Episode      int       `json:"episode,omitempty"`
-	Synopsis     string    `json:"synopsis,omitempty"`
-	StartsAt     time.Time `json:"startsAt"`
-	EndsAt       time.Time `json:"endsAt"`
-	IsNew        bool      `json:"isNew,omitempty"`
+	AiringID     string        `json:"airingID"`
+	SeriesID     string        `json:"seriesID,omitempty"`
+	Title        string        `json:"title"`
+	EpisodeTitle string        `json:"episodeTitle,omitempty"`
+	Season       int           `json:"season,omitempty"`
+	Episode      int           `json:"episode,omitempty"`
+	Synopsis     string        `json:"synopsis,omitempty"`
+	StartsAt     time.Time     `json:"startsAt"`
+	EndsAt       time.Time     `json:"endsAt"`
+	IsNew        bool          `json:"isNew,omitempty"`
+	ProviderRef  *MediaItemRef `json:"providerRef,omitempty"`
 }
 
 type TVChannel struct {
@@ -90,4 +91,20 @@ type TVRecordingRule struct {
 	Profile        string     `json:"profile,omitempty"`
 	LastScannedAt  *time.Time `json:"lastScannedAt,omitempty"`
 	LastError      string     `json:"lastError,omitempty"`
+	Provider       string     `json:"provider,omitempty"`
+	ExternalID     string     `json:"externalID,omitempty"`
+	ScheduledCount int        `json:"scheduledCount,omitempty"`
+}
+
+type TVRecording struct {
+	Status      string        `json:"status"` // scheduled, recording, processing, completed, failed, canceled
+	Provider    string        `json:"provider"`
+	ExternalID  string        `json:"externalID,omitempty"`
+	Channel     TVChannel     `json:"channel"`
+	Program     TVProgram     `json:"program"`
+	RuleID      string        `json:"ruleID,omitempty"`
+	StartsAt    time.Time     `json:"startsAt"`
+	EndsAt      time.Time     `json:"endsAt"`
+	LibraryItem *MediaItemRef `json:"libraryItem,omitempty"`
+	LastError   string        `json:"lastError,omitempty"`
 }

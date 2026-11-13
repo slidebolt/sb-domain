@@ -12,3 +12,7 @@ type TVRecordSeries struct {
 }
 
 func (TVRecordSeries) ActionName() string { return "tv_record_series" }
+
+type TVRecordCancel struct{}
+
+func (TVRecordCancel) ActionName() string { return "tv_record_cancel" }

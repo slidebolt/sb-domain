@@ -65,6 +65,11 @@ func init() {
 	Register("recording_switch", RecordingSwitch{})
 	Register("recording_file", RecordingFile{})
 	Register("tv_recording_rule", TVRecordingRule{})
+	Register("tv_recording", TVRecording{})
+	Register("media_server", MediaServer{})
+	Register("media_library", MediaLibrary{})
+	Register("media_session", MediaSession{})
+	Register("media_provider_connection", MediaProviderConnection{})
 
 	RegisterCommand("light_turn_on", LightTurnOn{})
 	RegisterCommand("light_turn_off", LightTurnOff{})
@@ -108,6 +113,11 @@ func init() {
 	RegisterCommand("timer_disable", TimerDisable{})
 	RegisterCommand("tv_record_current", TVRecordCurrent{})
 	RegisterCommand("tv_record_series", TVRecordSeries{})
+	RegisterCommand("tv_record_cancel", TVRecordCancel{})
+	RegisterCommand("media_provider_connect", MediaProviderConnect{})
+	RegisterCommand("media_provider_disconnect", MediaProviderDisconnect{})
+	RegisterCommand("media_play_item", MediaPlayItem{})
+	RegisterCommand("media_seek", MediaSeek{})
 }
 
 func init() {
