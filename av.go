@@ -23,11 +23,17 @@ type Remote struct {
 }
 
 type Camera struct {
-	IsStreaming     bool   `json:"isStreaming"`
-	IsRecording     bool   `json:"isRecording"`
-	MotionDetection bool   `json:"motionDetection"`
-	StreamSource    string `json:"streamSource,omitempty"`
-	SnapshotURL     string `json:"snapshotURL,omitempty"`
+	IsStreaming      bool     `json:"isStreaming"`
+	IsRecording      bool     `json:"isRecording"`
+	MotionDetection  bool     `json:"motionDetection"`
+	Available        bool     `json:"available"`
+	Enabled          bool     `json:"enabled"`
+	DetectionEnabled bool     `json:"detectionEnabled"`
+	SnapshotsEnabled bool     `json:"snapshotsEnabled"`
+	Zones            []string `json:"zones,omitempty"`
+	LastError        string   `json:"lastError,omitempty"`
+	StreamSource     string   `json:"streamSource,omitempty"`
+	SnapshotURL      string   `json:"snapshotURL,omitempty"`
 }
 
 // MediaStream describes a stream served by sb-media. Kind is audio today and
