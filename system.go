@@ -24,3 +24,8 @@ type Group struct {
 	Status      string   `json:"status,omitempty" doc:"Aggregate group status."`
 	Control     []string `json:"control,omitempty" doc:"Commands supported across group members."`
 }
+
+// Diagnostic is provider-owned operational state that has no controllable
+// behavior. Its open shape is intentional: transports expose different health
+// counters while sharing the same provider-neutral entity type.
+type Diagnostic map[string]any

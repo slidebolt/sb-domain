@@ -29,8 +29,9 @@ var entityDescriptions = map[string]string{
 	"binary_sensor": "A boolean observation such as occupancy, contact, or connectivity.", "button": "A stateless control that performs one action when pressed.",
 	"camera": "Camera availability, detection, snapshot, streaming, and recording state.", "climate": "Heating and cooling mode, temperature, and set-point state.",
 	"cover": "A movable cover such as a door, shade, or blind.", "event": "The latest occurrence of one or more event types.",
-	"group": "A dynamic collection of entities with aggregate state and controls.",
-	"fan":   "Fan power and speed state.", "humidifier": "Humidifier power, target humidity, and operating mode.",
+	"diagnostic": "Provider-neutral operational health and counters with a provider-owned open state shape.",
+	"group":      "A dynamic collection of entities with aggregate state and controls.",
+	"fan":        "Fan power and speed state.", "humidifier": "Humidifier power, target humidity, and operating mode.",
 	"light": "A controllable light with power, brightness, color, and effect capabilities.", "light_panel": "A light composed of independently addressable panel elements.",
 	"light_strip": "A light composed of independently addressable strip segments.", "lock": "Lock state and lock or unlock controls.",
 	"media_library": "A browsable collection of media supplied by a media server.", "media_player": "Playback, volume, source, and current-media state.",
@@ -215,6 +216,7 @@ func init() {
 	Register("event", Event{})
 	Register("phone", Phone{})
 	Register("group", Group{})
+	Register("diagnostic", Diagnostic{})
 	Register("time", Time{})
 	Register("location", Location{})
 
