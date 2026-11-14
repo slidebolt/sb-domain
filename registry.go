@@ -36,19 +36,19 @@ var entityDescriptions = map[string]string{
 	"light_strip": "A light composed of independently addressable strip segments.", "lock": "Lock state and lock or unlock controls.",
 	"media_library": "A browsable collection of media supplied by a media server.", "media_player": "Playback, volume, source, and current-media state.",
 	"media_provider_connection": "Connection and authentication state for a media provider.", "media_server": "A discoverable server that exposes media libraries.",
-	"media_session": "A current or recent media playback session.", "media_stream": "An addressable audio, video, or image stream.",
-	"number": "A bounded numeric setting.", "pbx": "Telephone exchange state and administration controls.",
-	"phone": "A telephone endpoint and its current call state.", "recording_file": "A completed recording and its output media file.",
-	"recording_switch": "The current recording control and capture state.", "remote": "Remote-control power and activity state.",
+	"media_session": "A current or recent media playback session.", "media_stream": "An active audio or video flow.",
+	"media_source": "A live audio or video source that can be played or recorded.",
+	"number":       "A bounded numeric setting.", "pbx": "Telephone exchange state and administration controls.",
+	"phone": "A telephone endpoint and its current call state.", "recorder": "A capability that captures a playable source into a media item.",
+	"recording_rule": "A reusable media query that creates recording schedules.", "remote": "Remote-control power and activity state.",
 	"select": "A setting constrained to one of a declared list of options.", "sensor": "A scalar or structured observation.",
 	"sip_call": "A SIP call and its lifecycle state.", "sip_endpoint": "A SIP endpoint registration and reachability state.",
 	"sip_messages": "Message history and sending controls for a SIP endpoint.", "sip_participant": "A participant in a SIP call.",
 	"sip_trunk": "A SIP trunk registration and connectivity state.", "siren": "Siren power and tone state.",
 	"speech": "Speech synthesis or recognition state.", "switch": "A generic controllable on or off component.",
-	"text": "A constrained text setting.", "timer": "A scheduled on and off control definition.",
+	"text": "A constrained text setting.", "schedule": "A durable set of triggers and provider-neutral actions.",
 	"time": "A local calendar and clock observation.", "location": "A geographic position and time-zone observation.",
 	"transcript": "Incremental or completed recognized speech text.", "tv_channel": "A television channel and its current or upcoming programme.",
-	"tv_recording": "A scheduled or active television recording.", "tv_recording_rule": "A reusable rule that schedules matching television episodes.",
 	"tv_tuner": "A television tuner and its selected channel or recording state.", "valve": "Valve open, closed, and position state.",
 }
 
@@ -133,13 +133,12 @@ func init() {
 	Register("select", Select{})
 	Register("text", Text{})
 	Register("climate", Climate{})
-	Register("timer", Timer{})
+	Register("schedule", Schedule{})
 	Register("tv_channel", TVChannel{})
 	Register("tv_tuner", TVTuner{})
-	Register("recording_switch", RecordingSwitch{})
-	Register("recording_file", RecordingFile{})
-	Register("tv_recording_rule", TVRecordingRule{})
-	Register("tv_recording", TVRecording{})
+	Register("recorder", Recorder{})
+	Register("recording_rule", RecordingRule{})
+	Register("media_source", MediaSource{})
 	Register("media_server", MediaServer{})
 	Register("media_library", MediaLibrary{})
 	Register("media_session", MediaSession{})
@@ -183,15 +182,15 @@ func init() {
 
 	RegisterCommand("climate_set_mode", ClimateSetMode{})
 	RegisterCommand("climate_set_temperature", ClimateSetTemperature{})
-	RegisterCommand("timer_enable", TimerEnable{})
-	RegisterCommand("timer_disable", TimerDisable{})
-	RegisterCommand("tv_record_current", TVRecordCurrent{})
-	RegisterCommand("tv_record_series", TVRecordSeries{})
-	RegisterCommand("tv_record_airing", TVRecordAiring{})
-	RegisterCommand("tv_record_cancel", TVRecordCancel{})
+	RegisterCommand("schedule_enable", ScheduleEnable{})
+	RegisterCommand("schedule_disable", ScheduleDisable{})
+	RegisterCommand("record_start", RecordStart{})
+	RegisterCommand("record_stop", RecordStop{})
+	RegisterCommand("record_cancel", RecordCancel{})
+	RegisterCommand("recording_rule_create", RecordingRuleCreate{})
+	RegisterCommand("recording_rule_delete", RecordingRuleDelete{})
 	RegisterCommand("media_provider_connect", MediaProviderConnect{})
 	RegisterCommand("media_provider_disconnect", MediaProviderDisconnect{})
-	RegisterCommand("media_play_item", MediaPlayItem{})
 	RegisterCommand("media_seek", MediaSeek{})
 }
 

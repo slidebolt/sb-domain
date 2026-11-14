@@ -1,7 +1,10 @@
 package domain
 
 // MediaPlayer commands
-type MediaPlay struct{}
+type MediaPlay struct {
+	Source     *PlayableSource `json:"source,omitempty"`
+	PositionMS int64           `json:"positionMS,omitempty"`
+}
 
 func (MediaPlay) ActionName() string { return "media_play" }
 

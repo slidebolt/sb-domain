@@ -1,5 +1,7 @@
 package domain
 
+import "time"
+
 type MediaPlayer struct {
 	State         string        `json:"state"` // playing, paused, idle, off
 	VolumeLevel   float64       `json:"volumeLevel"`
@@ -40,10 +42,13 @@ type Camera struct {
 // will also cover video and image. URL carries an access token, so treat it as
 // a secret and keep it out of logs.
 type MediaStream struct {
-	Status  string `json:"status"` // idle, starting, live, error
-	Kind    string `json:"kind"`
-	URL     string `json:"url,omitempty"`
-	Format  string `json:"format,omitempty"`
-	Viewers int    `json:"viewers"`
-	Error   string `json:"error,omitempty"`
+	Status    string         `json:"status"`
+	Source    PlayableSource `json:"source"`
+	Target    string         `json:"target,omitempty"`
+	Kind      string         `json:"kind"`
+	URL       string         `json:"url,omitempty"`
+	Format    string         `json:"format,omitempty"`
+	Viewers   int            `json:"viewers"`
+	StartedAt *time.Time     `json:"startedAt,omitempty"`
+	Error     string         `json:"error,omitempty"`
 }
