@@ -221,4 +221,3 @@ func (c LightstripSetSegments) Validate() error {
 	}
 	return nil
 }
-

@@ -82,6 +82,7 @@ type DeviceProfile struct {
 type Device struct {
 	ID       string                     `json:"id"`
 	Plugin   string                     `json:"plugin"`
+	Class    string                     `json:"class"`
 	Name     string                     `json:"name"`
 	Labels   map[string][]string        `json:"labels,omitempty"`
 	Profile  *DeviceProfile             `json:"profile,omitempty"`

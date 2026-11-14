@@ -2,8 +2,54 @@ package domain
 
 import (
 	"reflect"
+	"sort"
+	"strings"
 	"sync"
 )
+
+type RegisteredDefinition struct {
+	Type        string
+	Name        string
+	Description string
+	GoType      reflect.Type
+}
+
+func displayName(value string) string {
+	parts := strings.Split(value, "_")
+	for i := range parts {
+		if parts[i] != "" {
+			parts[i] = strings.ToUpper(parts[i][:1]) + parts[i][1:]
+		}
+	}
+	return strings.Join(parts, " ")
+}
+
+var entityDescriptions = map[string]string{
+	"alarm": "Security alarm state and arming controls.", "agent": "A software agent that accepts prompts and reports results.",
+	"binary_sensor": "A boolean observation such as occupancy, contact, or connectivity.", "button": "A stateless control that performs one action when pressed.",
+	"camera": "Camera availability, detection, snapshot, streaming, and recording state.", "climate": "Heating and cooling mode, temperature, and set-point state.",
+	"cover": "A movable cover such as a door, shade, or blind.", "event": "The latest occurrence of one or more event types.",
+	"group": "A dynamic collection of entities with aggregate state and controls.",
+	"fan":   "Fan power and speed state.", "humidifier": "Humidifier power, target humidity, and operating mode.",
+	"light": "A controllable light with power, brightness, color, and effect capabilities.", "light_panel": "A light composed of independently addressable panel elements.",
+	"light_strip": "A light composed of independently addressable strip segments.", "lock": "Lock state and lock or unlock controls.",
+	"media_library": "A browsable collection of media supplied by a media server.", "media_player": "Playback, volume, source, and current-media state.",
+	"media_provider_connection": "Connection and authentication state for a media provider.", "media_server": "A discoverable server that exposes media libraries.",
+	"media_session": "A current or recent media playback session.", "media_stream": "An addressable audio, video, or image stream.",
+	"number": "A bounded numeric setting.", "pbx": "Telephone exchange state and administration controls.",
+	"phone": "A telephone endpoint and its current call state.", "recording_file": "A completed recording and its output media file.",
+	"recording_switch": "The current recording control and capture state.", "remote": "Remote-control power and activity state.",
+	"select": "A setting constrained to one of a declared list of options.", "sensor": "A scalar or structured observation.",
+	"sip_call": "A SIP call and its lifecycle state.", "sip_endpoint": "A SIP endpoint registration and reachability state.",
+	"sip_messages": "Message history and sending controls for a SIP endpoint.", "sip_participant": "A participant in a SIP call.",
+	"sip_trunk": "A SIP trunk registration and connectivity state.", "siren": "Siren power and tone state.",
+	"speech": "Speech synthesis or recognition state.", "switch": "A generic controllable on or off component.",
+	"text": "A constrained text setting.", "timer": "A scheduled on and off control definition.",
+	"time": "A local calendar and clock observation.", "location": "A geographic position and time-zone observation.",
+	"transcript": "Incremental or completed recognized speech text.", "tv_channel": "A television channel and its current or upcoming programme.",
+	"tv_recording": "A scheduled or active television recording.", "tv_recording_rule": "A reusable rule that schedules matching television episodes.",
+	"tv_tuner": "A television tuner and its selected channel or recording state.", "valve": "Valve open, closed, and position state.",
+}
 
 var (
 	registryMu sync.RWMutex
@@ -42,6 +88,33 @@ func lookupType(typeName string) (reflect.Type, bool) {
 	t, ok := registry[typeName]
 	registryMu.RUnlock()
 	return t, ok
+}
+
+func EntityDefinitions() []RegisteredDefinition {
+	registryMu.RLock()
+	defer registryMu.RUnlock()
+	out := make([]RegisteredDefinition, 0, len(registry))
+	for name, typ := range registry {
+		description := entityDescriptions[name]
+		if description == "" {
+			description = "Shared domain state contract for " + displayName(name) + "."
+		}
+		out = append(out, RegisteredDefinition{Type: name, Name: displayName(name), Description: description, GoType: typ})
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].Type < out[j].Type })
+	return out
+}
+
+func CommandDefinitions() []RegisteredDefinition {
+	commandRegistryMu.RLock()
+	defer commandRegistryMu.RUnlock()
+	out := make([]RegisteredDefinition, 0, len(commandRegistry))
+	for name, typ := range commandRegistry {
+		display := displayName(name)
+		out = append(out, RegisteredDefinition{Type: name, Name: display, Description: "Executes the " + strings.ToLower(display) + " action.", GoType: typ})
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].Type < out[j].Type })
+	return out
 }
 
 func init() {
@@ -141,6 +214,9 @@ func init() {
 	Register("remote", Remote{})
 	Register("event", Event{})
 	Register("phone", Phone{})
+	Register("group", Group{})
+	Register("time", Time{})
+	Register("location", Location{})
 
 	// Alarm
 	RegisterCommand("alarm_arm_home", AlarmArmHome{})
