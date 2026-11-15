@@ -8,10 +8,72 @@ import (
 )
 
 type RegisteredDefinition struct {
-	Type        string
-	Name        string
-	Description string
-	GoType      reflect.Type
+	Type          string
+	Name          string
+	Description   string
+	SecurityGroup string
+	GoType        reflect.Type
+}
+
+const (
+	SecurityGroupMedia    = "media"
+	SecurityGroupHome     = "home"
+	SecurityGroupPrivate  = "private"
+	SecurityGroupSecurity = "security"
+	SecurityGroupSystem   = "system"
+)
+
+type SecurityGroupDefinition struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+var securityGroups = []SecurityGroupDefinition{
+	{ID: SecurityGroupMedia, Name: "Media", Description: "Movies, music, television, players, and recordings."},
+	{ID: SecurityGroupHome, Name: "Home controls", Description: "Ordinary lights, switches, climate, covers, and sensors."},
+	{ID: SecurityGroupPrivate, Name: "Private", Description: "Cameras, occupancy, calls, messages, and transcripts."},
+	{ID: SecurityGroupSecurity, Name: "Security", Description: "Locks, alarms, sirens, and security-sensitive access."},
+	{ID: SecurityGroupSystem, Name: "System", Description: "Agents, diagnostics, provider connections, and administration."},
+}
+
+var entitySecurityGroups = map[string]string{
+	"media_library": SecurityGroupMedia, "media_player": SecurityGroupMedia, "media_server": SecurityGroupMedia,
+	"media_session": SecurityGroupMedia, "tv_channel": SecurityGroupMedia, "tv_tuner": SecurityGroupMedia,
+	"recorder": SecurityGroupMedia, "recording_rule": SecurityGroupMedia,
+	"light": SecurityGroupHome, "light_panel": SecurityGroupHome, "light_strip": SecurityGroupHome,
+	"switch": SecurityGroupHome, "fan": SecurityGroupHome, "cover": SecurityGroupHome, "button": SecurityGroupHome,
+	"sensor": SecurityGroupHome, "binary_sensor": SecurityGroupHome, "number": SecurityGroupHome,
+	"select": SecurityGroupHome, "text": SecurityGroupHome, "climate": SecurityGroupHome,
+	"humidifier": SecurityGroupHome, "valve": SecurityGroupHome, "remote": SecurityGroupHome,
+	"camera": SecurityGroupPrivate, "event": SecurityGroupPrivate, "media_source": SecurityGroupPrivate,
+	"media_stream": SecurityGroupPrivate, "phone": SecurityGroupPrivate, "sip_call": SecurityGroupPrivate,
+	"sip_endpoint": SecurityGroupPrivate, "sip_messages": SecurityGroupPrivate, "sip_participant": SecurityGroupPrivate,
+	"transcript": SecurityGroupPrivate, "speech": SecurityGroupPrivate, "location": SecurityGroupPrivate,
+	"lock": SecurityGroupSecurity, "alarm": SecurityGroupSecurity, "siren": SecurityGroupSecurity,
+}
+
+func SecurityGroups() []SecurityGroupDefinition {
+	return append([]SecurityGroupDefinition(nil), securityGroups...)
+}
+
+func ValidSecurityGroup(group string) bool {
+	if group == "*" {
+		return true
+	}
+	for _, definition := range securityGroups {
+		if definition.ID == group {
+			return true
+		}
+	}
+	return false
+}
+
+func DefaultSecurityGroup(entityType string) string {
+	if group := entitySecurityGroups[entityType]; group != "" {
+		return group
+	}
+	return SecurityGroupSystem
 }
 
 func displayName(value string) string {
@@ -100,7 +162,7 @@ func EntityDefinitions() []RegisteredDefinition {
 		if description == "" {
 			description = "Shared domain state contract for " + displayName(name) + "."
 		}
-		out = append(out, RegisteredDefinition{Type: name, Name: displayName(name), Description: description, GoType: typ})
+		out = append(out, RegisteredDefinition{Type: name, Name: displayName(name), Description: description, SecurityGroup: DefaultSecurityGroup(name), GoType: typ})
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Type < out[j].Type })
 	return out

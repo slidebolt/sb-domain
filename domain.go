@@ -80,16 +80,17 @@ type DeviceProfile struct {
 // owning plugin can read it back via storage.GetPrivate. The schema is
 // plugin-defined; sb-domain treats it as raw bytes.
 type Device struct {
-	ID       string                     `json:"id"`
-	Plugin   string                     `json:"plugin"`
-	Class    string                     `json:"class,omitempty"`
-	Name     string                     `json:"name"`
-	Labels   map[string][]string        `json:"labels,omitempty"`
-	Profile  *DeviceProfile             `json:"profile,omitempty"`
-	Meta     map[string]json.RawMessage `json:"meta,omitempty"`
-	Status   *ResourceStatus            `json:"status,omitempty"`
-	Private  json.RawMessage            `json:"private,omitempty"`
-	Entities []Entity                   `json:"entities"`
+	ID            string                     `json:"id"`
+	Plugin        string                     `json:"plugin"`
+	Class         string                     `json:"class,omitempty"`
+	Name          string                     `json:"name"`
+	SecurityGroup string                     `json:"securityGroup,omitempty"`
+	Labels        map[string][]string        `json:"labels,omitempty"`
+	Profile       *DeviceProfile             `json:"profile,omitempty"`
+	Meta          map[string]json.RawMessage `json:"meta,omitempty"`
+	Status        *ResourceStatus            `json:"status,omitempty"`
+	Private       json.RawMessage            `json:"private,omitempty"`
+	Entities      []Entity                   `json:"entities"`
 }
 
 func (d Device) Key() string { return d.Plugin + "." + d.ID }
@@ -109,19 +110,20 @@ type EntityProfile struct {
 // The core resolves Target into member entities and fans commands out to them.
 // The domain does not interpret Target — it is passed through to the storage layer.
 type Entity struct {
-	ID       string                     `json:"id"`
-	Plugin   string                     `json:"plugin"`
-	DeviceID string                     `json:"deviceID"`
-	Type     string                     `json:"type"`
-	Name     string                     `json:"name"`
-	Labels   map[string][]string        `json:"labels,omitempty"`
-	Profile  *EntityProfile             `json:"profile,omitempty"`
-	Meta     map[string]json.RawMessage `json:"meta,omitempty"`
-	Status   *ResourceStatus            `json:"status,omitempty"`
-	Private  json.RawMessage            `json:"private,omitempty"`
-	Commands []string                   `json:"commands,omitempty"`
-	State    any                        `json:"state"`
-	Target   json.RawMessage            `json:"target,omitempty"`
+	ID            string                     `json:"id"`
+	Plugin        string                     `json:"plugin"`
+	DeviceID      string                     `json:"deviceID"`
+	Type          string                     `json:"type"`
+	Name          string                     `json:"name"`
+	SecurityGroup string                     `json:"securityGroup,omitempty"`
+	Labels        map[string][]string        `json:"labels,omitempty"`
+	Profile       *EntityProfile             `json:"profile,omitempty"`
+	Meta          map[string]json.RawMessage `json:"meta,omitempty"`
+	Status        *ResourceStatus            `json:"status,omitempty"`
+	Private       json.RawMessage            `json:"private,omitempty"`
+	Commands      []string                   `json:"commands,omitempty"`
+	State         any                        `json:"state"`
+	Target        json.RawMessage            `json:"target,omitempty"`
 }
 
 func (e Entity) Key() string { return e.Plugin + "." + e.DeviceID + "." + e.ID }
@@ -129,19 +131,20 @@ func (e Entity) Key() string { return e.Plugin + "." + e.DeviceID + "." + e.ID }
 // UnmarshalJSON hydrates State into the concrete registered type based on Type.
 func (e *Entity) UnmarshalJSON(data []byte) error {
 	var aux struct {
-		ID       string                     `json:"id"`
-		Plugin   string                     `json:"plugin"`
-		DeviceID string                     `json:"deviceID"`
-		Type     string                     `json:"type"`
-		Name     string                     `json:"name"`
-		Commands []string                   `json:"commands,omitempty"`
-		Labels   map[string]json.RawMessage `json:"labels,omitempty"`
-		Profile  *EntityProfile             `json:"profile,omitempty"`
-		Meta     map[string]json.RawMessage `json:"meta,omitempty"`
-		Status   *ResourceStatus            `json:"status,omitempty"`
-		Private  json.RawMessage            `json:"private,omitempty"`
-		State    json.RawMessage            `json:"state,omitempty"`
-		Target   json.RawMessage            `json:"target,omitempty"`
+		ID            string                     `json:"id"`
+		Plugin        string                     `json:"plugin"`
+		DeviceID      string                     `json:"deviceID"`
+		Type          string                     `json:"type"`
+		Name          string                     `json:"name"`
+		SecurityGroup string                     `json:"securityGroup,omitempty"`
+		Commands      []string                   `json:"commands,omitempty"`
+		Labels        map[string]json.RawMessage `json:"labels,omitempty"`
+		Profile       *EntityProfile             `json:"profile,omitempty"`
+		Meta          map[string]json.RawMessage `json:"meta,omitempty"`
+		Status        *ResourceStatus            `json:"status,omitempty"`
+		Private       json.RawMessage            `json:"private,omitempty"`
+		State         json.RawMessage            `json:"state,omitempty"`
+		Target        json.RawMessage            `json:"target,omitempty"`
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
@@ -152,6 +155,7 @@ func (e *Entity) UnmarshalJSON(data []byte) error {
 	e.DeviceID = aux.DeviceID
 	e.Type = aux.Type
 	e.Name = aux.Name
+	e.SecurityGroup = aux.SecurityGroup
 	e.Commands = aux.Commands
 	e.Labels = decodeLabels(aux.Labels)
 	e.Profile = aux.Profile
