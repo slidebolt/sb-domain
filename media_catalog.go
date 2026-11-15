@@ -82,6 +82,7 @@ func (RecordCancel) ActionName() string { return "record_cancel" }
 type MediaQuery struct {
 	Kind       string                     `json:"kind,omitempty"`
 	Title      string                     `json:"title,omitempty"`
+	Item       *MediaItemRef              `json:"item,omitempty"`
 	Attributes map[string]json.RawMessage `json:"attributes,omitempty"`
 }
 
