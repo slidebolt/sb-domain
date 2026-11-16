@@ -80,17 +80,17 @@ type DeviceProfile struct {
 // owning plugin can read it back via storage.GetPrivate. The schema is
 // plugin-defined; sb-domain treats it as raw bytes.
 type Device struct {
-	ID            string                     `json:"id"`
-	Plugin        string                     `json:"plugin"`
-	Class         string                     `json:"class,omitempty"`
-	Name          string                     `json:"name"`
-	SecurityGroup string                     `json:"securityGroup,omitempty"`
-	Labels        map[string][]string        `json:"labels,omitempty"`
-	Profile       *DeviceProfile             `json:"profile,omitempty"`
-	Meta          map[string]json.RawMessage `json:"meta,omitempty"`
-	Status        *ResourceStatus            `json:"status,omitempty"`
-	Private       json.RawMessage            `json:"private,omitempty"`
-	Entities      []Entity                   `json:"entities"`
+	ID             string                     `json:"id"`
+	Plugin         string                     `json:"plugin"`
+	Class          string                     `json:"class,omitempty"`
+	Name           string                     `json:"name"`
+	SecurityGroups []string                   `json:"securityGroups,omitempty"`
+	Labels         map[string][]string        `json:"labels,omitempty"`
+	Profile        *DeviceProfile             `json:"profile,omitempty"`
+	Meta           map[string]json.RawMessage `json:"meta,omitempty"`
+	Status         *ResourceStatus            `json:"status,omitempty"`
+	Private        json.RawMessage            `json:"private,omitempty"`
+	Entities       []Entity                   `json:"entities"`
 }
 
 func (d Device) Key() string { return d.Plugin + "." + d.ID }

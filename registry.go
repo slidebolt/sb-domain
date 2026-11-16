@@ -1,10 +1,13 @@
 package domain
 
 import (
+	"fmt"
 	"reflect"
 	"sort"
 	"strings"
 	"sync"
+
+	contract "github.com/slidebolt/sb-contract"
 )
 
 type RegisteredDefinition struct {
@@ -67,6 +70,86 @@ func ValidSecurityGroup(group string) bool {
 		}
 	}
 	return false
+}
+
+// ValidResourceSecurityGroup reports whether group can classify a resource.
+// The wildcard is valid for tokens, but never for an entity or device.
+func ValidResourceSecurityGroup(group string) bool {
+	return group != "*" && ValidSecurityGroup(group)
+}
+
+// NormalizeSecurityGroups validates, de-duplicates, and sorts resource groups.
+func NormalizeSecurityGroups(groups ...string) ([]string, error) {
+	seen := make(map[string]struct{}, len(groups))
+	for _, group := range groups {
+		if !ValidResourceSecurityGroup(group) {
+			return nil, fmt.Errorf("invalid security group %q", group)
+		}
+		seen[group] = struct{}{}
+	}
+	out := make([]string, 0, len(seen))
+	for group := range seen {
+		out = append(out, group)
+	}
+	sort.Strings(out)
+	return out, nil
+}
+
+// DeviceSecurityGroups returns the canonical union of a device's plugin-owned
+// base groups and its entities' effective groups. Empty devices are system
+// resources so they never become implicitly public.
+func DeviceSecurityGroups(device Device, entities ...Entity) ([]string, error) {
+	groups := append([]string(nil), device.SecurityGroups...)
+	allEntities := append(append([]Entity(nil), device.Entities...), entities...)
+	for _, entity := range allEntities {
+		group := entity.SecurityGroup
+		if group == "" {
+			group = DefaultSecurityGroup(entity.Type)
+		}
+		groups = append(groups, group)
+	}
+	if len(groups) == 0 {
+		groups = append(groups, SecurityGroupSystem)
+	}
+	return NormalizeSecurityGroups(groups...)
+}
+
+// ValidatePluginSecurityGroups verifies that a serialized plugin manifest
+// uses registered domain types and valid provider-neutral security groups.
+func ValidatePluginSecurityGroups(definitions *contract.PluginDefinitions) error {
+	if definitions == nil {
+		return fmt.Errorf("plugin definitions are required")
+	}
+	knownTypes := make(map[string]struct{})
+	for _, definition := range EntityDefinitions() {
+		knownTypes[definition.Type] = struct{}{}
+	}
+	for _, entityType := range definitions.EntityTypes {
+		if _, ok := knownTypes[entityType]; !ok {
+			return fmt.Errorf("entity type %q is not registered by sb-domain", entityType)
+		}
+		if group := DefaultSecurityGroup(entityType); !ValidResourceSecurityGroup(group) {
+			return fmt.Errorf("entity type %q resolves to invalid security group %q", entityType, group)
+		}
+	}
+	for _, class := range definitions.DeviceClasses {
+		if len(class.SecurityGroups) == 0 {
+			return fmt.Errorf("device class %q must declare at least one security group", class.Class)
+		}
+		groups, err := NormalizeSecurityGroups(class.SecurityGroups...)
+		if err != nil {
+			return fmt.Errorf("device class %q: %w", class.Class, err)
+		}
+		if len(groups) != len(class.SecurityGroups) {
+			return fmt.Errorf("device class %q security groups are not unique", class.Class)
+		}
+	}
+	for _, extension := range definitions.Extensions {
+		if !ValidResourceSecurityGroup(extension.SecurityGroup) {
+			return fmt.Errorf("extension %q has invalid security group %q", extension.Type, extension.SecurityGroup)
+		}
+	}
+	return nil
 }
 
 func DefaultSecurityGroup(entityType string) string {
